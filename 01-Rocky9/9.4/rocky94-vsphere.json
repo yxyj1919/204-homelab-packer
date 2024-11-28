@@ -5,19 +5,20 @@
       "RAM": "{{user `vm-mem-size`}}",
       "RAM_reserve_all": false,
       "boot_command": [
-        "<esc><wait>",
-        "linux inst.ks=hd:fd0:/ks.cfg<enter>"
-      ],
-      "boot_order": "disk,cdrom,floppy",
+        "<up>",
+        "<tab>",
+        "<spacebar>",
+        " text inst.ks=hd:sr1:/ks.cfg",
+        "<enter>"
+        ], 
       "boot_wait": "10s",
       "cluster": "{{user `vsphere-cluster`}}",
       "convert_to_template": true,
       "datacenter": "{{user `vsphere-datacenter`}}",
       "datastore": "{{user `vsphere-datastore`}}",
       "disk_controller_type": "pvscsi",
-      "floppy_files": [
-        "ks.cfg"
-      ],
+      "cd_files": ["./kickstart/ks.cfg"],
+      "cd_label": "OEMDRV",
       "folder": "{{user `vm-folder`}}",
       "guest_os_type": "rockylinux_64Guest",
       "insecure_connection": "true",
@@ -50,17 +51,10 @@
   ],
   "provisioners": [
     {
-      "inline": [
-        "sed -i 's/^enabled=1/enabled=0/' /etc/yum.repos.d/*.repo",
-        "wget -O /etc/yum.repos.d/rocky-local.repo  https://repo.changw.xyz/rocky-local.repo",
-        "wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/epel-local.repo",
-        "wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/docker-local.repo",
-        "yum clean all",
-        "yum makecache",
-        "yum update -y",
-        "yum clean all"
-      ],
-      "type": "shell"
+      "type": "shell",
+      "script": "./scripts/post-install.sh",
+      "pause_before": "10s",
+      "timeout": "10s"
     }
   ],
   "variables": {
@@ -70,7 +64,7 @@
     "vm-disk-size": "40960",
     "vm-folder": "98-TEMPLATE",
     "vm-mem-size": "2048",
-    "vm-name": "TEMPLATE-Packer-Rock9",
+    "vm-name": "TEMPLATE-PACKER-Rocky94",
     "vm-version": "21",
     "vm-video-ram": "16384",
     "vsphere-datacenter": "Datacenter",
