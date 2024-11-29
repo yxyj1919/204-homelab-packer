@@ -1,0 +1,60 @@
+{
+  "builders": [
+    {
+      "CPUs": "{{user `vm_cpu_num`}}",
+      "RAM": "{{user `vm_mem_size`}}",
+      "RAM_reserve_all": false,
+      "boot_command": [
+        "<up>",
+        "e",
+        "<down><down><end><wait>",
+        "text inst.ks=hd:sr1:/ks.cfg",
+        "<enter><wait><leftCtrlOn>x<leftCtrlOff>"
+        ], 
+      "boot_wait": "10s",
+      "cluster": "{{user `vsphere_cluster`}}",
+      "convert_to_template": true,
+      "datacenter": "{{user `vsphere_datacenter`}}",
+      "datastore": "{{user `vsphere_datastore`}}",
+      "disk_controller_type": "pvscsi",
+      "cd_files": ["./kickstart/ks.cfg"],
+      "cd_label": "OEMDRV",
+      "folder": "{{user `vm_folder`}}",
+      "guest_os_type": "rockylinux_64Guest",
+      "insecure_connection": "true",
+      "iso_paths": [
+        "{{user `iso_url`}}"
+      ],
+      "network_adapters": [
+        {
+          "network": "{{user `vsphere_network`}}",
+          "network_card": "vmxnet3"
+        }
+      ],
+      "notes": "Build via Packer in {{ .isotime }} using reference date: {{ .magic_reference_date }}",
+      "password": "{{user `vsphere_password`}}",
+      "ssh_password": "Admin123",
+      "ssh_username": "root",
+      "storage": [
+        {
+          "disk_size": "{{user `vm_disk_size`}}",
+          "disk_thin_provisioned": true
+        }
+      ],
+      "type": "vsphere-iso",
+      "username": "{{user `vsphere_user`}}",
+      "vcenter_server": "{{user `vsphere_server`}}",
+      "video_ram": "{{user `vm_video_ram`}}",
+      "vm_name": "{{user `vm_name`}}-{{isotime \"2006-01-02\"}}",
+      "vm_version": "{{user `vm_version`}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./scripts/post-install.sh",
+      "pause_before": "10s",
+      "timeout": "10s"
+    }
+  ]
+}
