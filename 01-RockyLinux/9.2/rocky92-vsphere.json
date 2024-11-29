@@ -6,11 +6,11 @@
       "RAM_reserve_all": false,
       "boot_command": [
         "<up>",
-        "e",
-        "<down><down><end><wait>",
-        "text inst.ks=hd:sr1:/ks.cfg",
-        "<enter><wait><leftCtrlOn>x<leftCtrlOff>"
-        ], 
+        "<tab>",
+        "<spacebar>",
+        " text inst.ks=hd:sr1:/ks.cfg",
+        "<enter>"
+        ],
       "boot_wait": "10s",
       "cluster": "{{user `vsphere_cluster`}}",
       "convert_to_template": true,

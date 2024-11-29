@@ -4,7 +4,7 @@ wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/epel-local.rep
 wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/docker-local.repo
 yum clean all
 yum makecache
-yum update -y
-yum clean all
+#yum update -y
+#yum clean all
 #nmcli connection modify ens192 ipv4.method auto ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv6.method auto
 #nmcli connection up ens192
