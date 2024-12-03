@@ -1,11 +1,11 @@
 {
-    "iso_url": "[11-Datastore-NUC-1-NVME] ISO-Packer/Rocky-9.4-x86_64-dvd.iso",
+    "iso_url": "[11-Datastore-NUC-1-NVME] ISO-Packer/ubuntu-22.04.5-desktop-amd64.iso",
     "magic_reference_date": "2024-11-26",
     "vm_cpu_num": "2",
     "vm_disk_size": "40960",
     "vm_folder": "98-TEMPLATE",
     "vm_mem_size": "2048",
-    "vm_name": "TEMPLATE-PACKER-Rocky94",
+    "vm_name": "TEMPLATE-PACKER-Ubuntu2204",
     "vm_version": "21",
     "vm_video_ram": "16384",
     "vsphere_datacenter": "Datacenter",
