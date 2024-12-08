@@ -15,10 +15,7 @@ vsphere_datastore = "11-Datastore-NUC-1-NVME"
 #iso_path = ["11-Datastore-NUC-1-NVME/ISO-Packer/ubuntu-24.04-live-server-amd64.iso"]
 iso_file = "ubuntu-24.04-live-server-amd64.iso"
 iso_folder = "ISO-Packer"
-
-
-
-cpu_num = 2
-mem_size = 4096
-disk_size = 40960
+vm_cpu_num = 2
+vm_mem_size = 4096
+vm_disk_size = 40960
 vm_disk_controller_type = ["pvscsi"]

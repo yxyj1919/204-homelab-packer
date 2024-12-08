@@ -1,14 +1,14 @@
-variable "cpu_num" {
+variable "vm_cpu_num" {
   type    = string
   default = ""
 }
 
-variable "disk_size" {
+variable "vm_disk_size" {
   type    = string
   default = ""
 }
 
-variable "mem_size" {
+variable "vm_mem_size" {
   type    = string
   default = ""
 }
