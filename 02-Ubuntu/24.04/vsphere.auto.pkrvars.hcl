@@ -19,3 +19,4 @@ vm_cpu_num = 2
 vm_mem_size = 4096
 vm_disk_size = 40960
 vm_disk_controller_type = ["pvscsi"]
+shell_scripts = ["./scripts/script.sh"]

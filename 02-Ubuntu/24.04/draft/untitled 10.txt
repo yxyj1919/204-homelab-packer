@@ -1,53 +1,36 @@
 #cloud-config
-# https://www.virtualtothecore.com/my-automated-lab-project-2-create-a-ubuntu-template-in-vmware-vsphere-with-packer/
+#https://www.virtualtothecore.com/my-automated-lab-project-2-create-a-ubuntu-template-in-vmware-vsphere-with-packer/
 
 autoinstall:
   version: 1
-
   early-commands:
-    # Workaround to stop SSH for Packer as it thinks the SSH connection timed out
-    - sudo systemctl stop ssh
-
+      # workaround to stop ssh for packer as it thinks it timed out
+      - sudo systemctl stop ssh
   locale: en_US
   keyboard:
-    layout: us
-
-  packages:
-    # List of essential packages for the VM
-    - open-vm-tools
-    - openssh-server
-    - cloud-init
-    - net-tools
-    - vim
-    # Add other packages as needed (e.g., net-tools, curl, etc.)
-    #packages: [open-vm-tools, openssh-server, net-tools, network-manager, perl, open-iscsi, curl, vim, ifupdown, zip, unzip, gnupg2, software-properties-common, apt-transport-https, ca-certificates, lsb-release, python3-pip, jq, cloud-init]
-
+      layout: us
+  #packages: [open-vm-tools, openssh-server, net-tools, network-manager, perl, open-iscsi, curl, vim, ifupdown, zip, unzip, gnupg2, software-properties-common, apt-transport-https, ca-certificates, lsb-release, python3-pip, jq, cloud-init]
+  packages: [open-vm-tools, openssh-server,cloud-init]
   network:
     network:
       version: 2
       ethernets:
         ens192:
           dhcp4: true
-
   identity:
-    hostname: ubuntu2404
-    username: ubuntu
-    password: "$6$Lweaq1ueugnQLphl$hP5Sst3AsP3Erw3Ldh4BZwIxL09Un/3joFJAYbkIGdtBlAr7cQNhYy7.n0soe/IZRPTU9WafF/HKuAMV5fok01"
-
+     hostname: ubuntu2204
+     username: ubuntu
+     password: "$6$Lweaq1ueugnQLphl$hP5Sst3AsP3Erw3Ldh4BZwIxL09Un/3joFJAYbkIGdtBlAr7cQNhYy7.n0soe/IZRPTU9WafF/HKuAMV5fok01"
   ssh:
     install-server: true
     allow-pw: true
     authorized-keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCcYobHbLv418tghxZoARJYn8hklHF4pG+Dr4CTybR4qrXg+BG/xT1j/2j68xDrcjX7/OZG0q01EMyWipZEnYraW975Hhmi6vfRP7hCIe7jhztva0DoeY+xC4ZMIeMxPPlUDMSf+UW3kQo4Ejkybh3N7go2AUMILSz0P8HWdWNheZfOoqYujEDtb7xOJlhiPov9u+rfOm4c7MbH12t9uCUlwhXGBc4TR9IVG1Y5IaLstLk4AO0WmrmGp/EhJLvvh48sKprQ8125+7YxbilM+rGmKjqRpmqaIZxq/7Du2PwWwl8dv/l+2c+MX+4slpucdZ0/x6mzYY3mdYswEuJdkpjI6lfKBnY1G5tsfecw3YXdy7ZkXt/ygKFcmaSIoJ5pzZRq28f9vPXPR5kV5/Yf7rUo+Vi+/g5ZiEbZ+6hD7pAfnyhNOIKt6ylZRJ1hMlBj4jcUnZd2y3PKW9wRdnZspJG3/Qtk/kT5cCSRt8yVMSIZaTgCHYlGQhphcZM9hplqtd+AcvL9MVCNOtBYCGlsGYS59B6XY/MNv9qlIyeY2gX3h5JO6mLNLaVTXKfGlW+LlnCJR9YVh/gfm34Z4L9sAiGUG3YAl3t5CvMZaIRaSrfAQIIMEYXgHLtjj4xQp4foPOGwn7Q83/oWPgEvqC5Jbgr4T4NlZFrePSiFQ1zXhfwvnw== wangchang0729@gmail.com
-
   storage:
     layout:
       name: direct
-
   user-data:
-    disable_root: false  # Ensure root is enabled if needed for recovery
-
+    disable_root: false
   late-commands:
-    # Grant passwordless sudo to the user for admin tasks
     - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
     - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/ubuntu

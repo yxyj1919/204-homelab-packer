@@ -96,3 +96,9 @@ variable "vm_disk_controller_type" {
   description = "The virtual disk controller types in sequence. (e.g. 'pvscsi')"
   default     = ["pvscsi"]
 }
+
+variable "shell_scripts" {
+  type = list(string)
+  description = "A list of scripts."
+  default = []
+}

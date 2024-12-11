@@ -1,0 +1,43 @@
+#cloud-config
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+# Ubuntu Server 24.04 LTS
+
+autoinstall:
+  version: 1
+  early-commands:
+    - sudo systemctl stop ssh
+  locale: "en_US.UTF-8"
+  keyboard:
+    layout: "us"
+  storage:
+    layout:
+      name: lvm
+    config: []
+  identity:
+    hostname: ubuntu24-template
+    username: ubuntu
+    password: "$6$Lweaq1ueugnQLphl$hP5Sst3AsP3Erw3Ldh4BZwIxL09Un/3joFJAYbkIGdtBlAr7cQNhYy7.n0soe/IZRPTU9WafF/HKuAMV5fok01"
+  ssh:
+    install-server: true
+    allow-pw: true
+  packages:
+    - openssh-server
+    - open-vm-tools
+    - cloud-init
+  user-data:
+    disable_root: false
+    timezone: "Asia/Shanghai"
+    chpasswd:
+      expire: false
+      list:
+        - root:Admin123
+  late-commands:
+    - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
+    - sed -i '$a\PermitRootLogin yes' /target/etc/ssh/sshd_config
+    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+    - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/ubuntu
