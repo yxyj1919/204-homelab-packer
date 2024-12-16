@@ -8,8 +8,8 @@ source "vsphere-iso" "default" {
   datastore             = var.vsphere_datastore
   folder                = var.vm_folder
   convert_to_template   = true
-  vm_name               = "${var.vsphere_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
-  iso_paths             = ["[${var.vsphere_datastore}]/${var.iso_folder}/${var.iso_file}"]
+  vm_name               = "${var.vm_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
+  iso_paths             = ["[${var.vsphere_datastore}]/${var.vm_iso_folder}/${var.vm_iso_file}"]
 
   # Boot commands for Rocky Linux 9 installation
   boot_wait             = "10s"
@@ -48,7 +48,7 @@ source "vsphere-iso" "default" {
 
   # Network adapters
   network_adapters {
-    network      = var.vsphere_portgroup_name
+    network      = var.vm_portgroup_name
     network_card = var.vm_vnic
   }
 
