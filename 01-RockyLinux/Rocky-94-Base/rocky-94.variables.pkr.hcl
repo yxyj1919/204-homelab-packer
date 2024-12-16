@@ -1,21 +1,16 @@
 variable "vm_cpu_num" {
   type    = string
-  default = ""
+  default = "2"
 }
 
 variable "vm_disk_size" {
   type    = string
-  default = ""
+  default = "40960"
 }
 
 variable "vm_mem_size" {
   type    = string
-  default = ""
-}
-
-variable "os_iso_path" {
-  type    = string
-  default = ""
+  default = "4096"
 }
 
 variable "vsphere_cluster" {
@@ -28,21 +23,6 @@ variable "vsphere_datastore" {
   default = ""
 }
 
-variable "vsphere_dc_name" {
-  type    = string
-  default = ""
-}
-
-variable "vsphere_folder" {
-  type    = string
-  default = ""
-}
-
-variable "vsphere_host" {
-  type    = string
-  default = ""
-}
-
 variable "vsphere_password" {
   type      = string
   sensitive = true
@@ -51,6 +31,11 @@ variable "vsphere_password" {
 variable "vsphere_portgroup_name" {
   type    = string
   default = ""
+}
+
+variable "vm_vnic" {
+  type    = string
+  default = "vmxnet3"
 }
 
 variable "vsphere_server" {
@@ -73,18 +58,6 @@ variable "vsphere_user" {
   default = ""
 }
 
-variable "ssh_username" {
-  type      = string
-  default   = ""
-  sensitive = true
-}
-
-variable "ssh_password" {
-  type      = string
-  default   = ""
-  sensitive = true
-}
-
 variable "iso_file" {
   type    = string
   default = ""
@@ -102,12 +75,6 @@ variable "vm_disk_controller_type" {
   default     = ["pvscsi"]
 }
 
-variable "shell_scripts" {
-  type = list(string)
-  description = "A list of scripts."
-  default = []
-}
-
 variable "vm_version" {
   type    = string
   default = "21"
@@ -123,7 +90,20 @@ variable "vm_video_ram" {
   default = ""
 }
 
-variable "vm_name" {
-  type    = string
-  default = ""
+variable "vm_ssh_username" {
+  type      = string
+  default   = "root"
+  sensitive = true
+}
+
+variable "vm_ssh_password" {
+  type      = string
+  default   = "Admin123"
+  sensitive = true
+}
+
+variable "shell_scripts" {
+  type = list(string)
+  description = "A list of scripts."
+  default = []
 }
