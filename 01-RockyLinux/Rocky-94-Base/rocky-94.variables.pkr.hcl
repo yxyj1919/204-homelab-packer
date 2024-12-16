@@ -70,7 +70,7 @@ variable "vm_version" {
 
 variable "vm_video_ram" {
   type    = string
-  default = "4096"
+  default = "16384"
 }
 
 variable "vm_vnic" {
