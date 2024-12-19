@@ -1,4 +1,5 @@
 source "vsphere-iso" "default" {
+  # vSphere Settings
   vcenter_server        = var.vsphere_server
   insecure_connection   = true
   username              = var.vsphere_user
@@ -28,10 +29,12 @@ source "vsphere-iso" "default" {
     " text inst.ks=hd:sr1:/ks.cfg",
     "<enter>"
   ]
+  # CD files for cloud-init (make sure these files exist and are correctly configured)
 
   cd_files              = ["./kickstart/ks.cfg"]
   cd_label              = "OMDRV"
 
+# Virtual machine configuration
   guest_os_type         = "rockylinux_64Guest"
   vm_version            = var.vm_version
   CPUs                  = var.vm_cpu_num

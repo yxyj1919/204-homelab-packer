@@ -12,7 +12,8 @@ vsphere_datastore      = "11-Datastore-NUC-1-NVME"
 #vm_cpu_num            = 2
 #vm_disk_size          = 40960
 #vm_mem_size           = 2048
-vm_video_ram          = 16384
+vm_video_ram           = 16384
+
 #vm_version            = 21
 vm_folder              = "98-TEMPLATE"
 vm_portgroup_name      = "Packer-Network"
