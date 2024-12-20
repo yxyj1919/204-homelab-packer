@@ -21,7 +21,7 @@ vm_template_name      = "TEMPLATE-PACKER-Ubuntu2404-BASE-HL"
 vm_iso_file           = "ubuntu-24.04-live-server-amd64.iso"
 vm_iso_folder         = "ISO-Packer"
 
-shell_scripts = ["./scripts/script.sh"]
+shell_scripts = ["./scripts/post-install.sh"]
 
 #iso_path = ["${vsphere_datastore}/ISO-Packer/ubuntu-24.04-live-server-amd64.iso"]
 #iso_path = ["11-Datastore-NUC-1-NVME/ISO-Packer/ubuntu-24.04-live-server-amd64.iso"]
