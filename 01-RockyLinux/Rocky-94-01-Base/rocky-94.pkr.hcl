@@ -8,7 +8,7 @@ source "vsphere-iso" "default" {
   cluster               = var.vsphere_cluster
   datastore             = var.vsphere_datastore
   folder                = var.vm_folder
-  convert_to_template   = true
+  convert_to_template   = false
   vm_name               = "${var.vm_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
   iso_paths             = ["[${var.vsphere_datastore}]/${var.vm_iso_folder}/${var.vm_iso_file}"]
 
@@ -42,7 +42,7 @@ source "vsphere-iso" "default" {
   RAM_reserve_all       = false
   video_ram             = var.vm_video_ram
   disk_controller_type  = var.vm_disk_controller_type
-
+  reattach_cdroms = 1
   # Storage definition
   storage {
     disk_size             = var.vm_disk_size

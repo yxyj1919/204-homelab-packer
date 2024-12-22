@@ -4,7 +4,18 @@ source "vsphere-clone" "rocky94-adv" {
   password             = var.vsphere_password
   insecure_connection  = true
 
-  template             = var.vm_latest_template_name
+/*
+  content_library_destination {
+    description       = "Build via Packer from basic template. Version:${var.template_version} ."
+    destroy           = "false"
+    library           = var.vsphere_content_library
+    name              = "${var.vm_name}-latest"
+    ovf               = "true"
+  }
+  convert_to_template = false
+*/
+
+  template             = var.vm_template_name
   datacenter           = var.vsphere_datacenter
   cluster              = var.vsphere_cluster
 
@@ -28,13 +39,22 @@ source "vsphere-clone" "rocky94-adv" {
     dns_server_list      = ["192.168.100.1"]
   }
 
-  ssh_username         = "vmuser"
+  #ssh_username         = "vmuser"
+  ssh_username         = "root"
   ssh_password         = "Admin123"
 
 }
 
 build {
   sources = ["source.vsphere-clone.rocky94-adv"]
+
+  provisioner "shell" {
+    inline = [
+      "wget -O /tmp/cleanup.sh https://repo.changw.xyz/cleaup-rocky9.sh",  # URL of the script
+      "chmod +x /tmp/cleanup.sh",  # Make the script executable
+      "/tmp/cleanup.sh"            # Execute the script
+    ]
+  }
 
   provisioner "file" {
     source      = "./scripts/post-install.sh"  # Path to your local script

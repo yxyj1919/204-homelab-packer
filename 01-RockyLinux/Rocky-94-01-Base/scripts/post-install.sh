@@ -1,8 +1,14 @@
 #!/usr/bin/bash
 
-# Prepares a Rocky9 Server guest operating system.
+# Prepares a Rocky9 Server guest operating system.#
+echo "######################################"
+echo "Rocky9-Base-Post-Install"
+echo "######################################"
 
-### Modify DNF Source. ### 
+# Modify DNF Source. # 
+echo "######################################"
+echo "Modify DNF Source."
+echo "######################################" 
 sed -i 's/^enabled=1/enabled=0/' /etc/yum.repos.d/*.repo
 wget -O /etc/yum.repos.d/rocky-local.repo  https://repo.changw.xyz/rocky-local.repo
 wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/epel-local.repo
@@ -10,11 +16,17 @@ wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/docker-local.r
 yum clean all
 yum makecache
 
-### Update Packages. ###
+# Update Packages. #
+echo "######################################"
+echo "Update Packages."
+echo "######################################"
 yum update -y
 yum clean all
 
-### Create a cleanup script. ###
+# Create a cleanup script. #
+echo "######################################"
+echo "Create a cleanup script."
+echo "######################################"
 echo '> Creating cleanup script ...'
 sudo cat << EOF > /tmp/cleanup.sh
 #!/bin/bash
@@ -89,21 +101,29 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 # reboot
 EOF
 
-### Change script permissions for execution. ### 
+# Change script permissions for execution. #
+echo "######################################"
+echo "Change script permissions for execution."
+echo "######################################"
 echo '> Changeing script permissions for execution ...'
 sudo chmod +x /tmp/cleanup.sh
 
 
-### Executes the cleauup script. ### 
+# Executes the cleauup script. #
+echo "######################################"
+echo "Executes the cleauup script."
+echo "######################################"
 echo '> Executing the cleanup script ...'
 sudo /tmp/cleanup.sh
 
 ### All done. ### 
 echo '> Done.'  
 
-
-### Install docker. ###
-: '
+<<COMMENT
+# Install docker. #
+echo "######################################"
+echo "Install Docker"
+echo "######################################"
 dnf update -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
@@ -113,10 +133,12 @@ apt install docker-ce -y
 groupadd docker
 usermod -aG docker vmuser
 mkdir ~/testfolder
-'
+COMMENT
 
 #nmcli connection modify ens192 ipv4.method auto ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv6.method auto
 #nmcli connection up ens192
 
 echo '> Packer Template Build -- Complete'
-
+echo "######################################"
+echo "Rocky9-Base-Post-Install -- Complete"
+echo "######################################"

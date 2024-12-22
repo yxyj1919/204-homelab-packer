@@ -32,10 +32,7 @@ variable "vm_template_name" {
   default = ""
 }
 
-variable "vm_latest_template_name" {
-  type    = string
-  default = ""
-}
+
 
 variable "vm_new_template_name" {
   type    = string
