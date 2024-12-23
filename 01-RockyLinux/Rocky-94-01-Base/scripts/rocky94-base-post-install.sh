@@ -11,10 +11,16 @@ echo "Modify DNF Source."
 echo "######################################" 
 sed -i 's/^enabled=1/enabled=0/' /etc/yum.repos.d/*.repo
 wget -O /etc/yum.repos.d/rocky-local.repo  https://repo.changw.xyz/rocky-local.repo
-wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/epel-local.repo
-wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/docker-local.repo
-yum clean all
+
+# Install EPEL #
+dnf install epel-release -y
+#wget -O /etc/yum.repos.d/epel-local.repo  https://repo.changw.xyz/epel-local.repo
+
+# Update Docker Repo 
+# wget -O /etc/yum.repos.d/docker-local.repo  https://repo.changw.xyz/docker-local.repo
 yum makecache
+
+
 
 # Update Packages. #
 echo "######################################"

@@ -22,6 +22,4 @@ echo "#################################################"
 # 运行 Packer
 #export PACKER_LOG=1
 #packer build -var "vm_template_name=$latest_template" -force .
-
-
 packer build -var "vm_template_name=$latest_template" -var-file=vsphere.auto.pkrvars.hcl -force .

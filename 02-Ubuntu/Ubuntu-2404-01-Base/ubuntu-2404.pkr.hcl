@@ -1,4 +1,4 @@
-source "vsphere-iso" "default" {
+source "vsphere-iso" "ubuntu2404-base" {
   # vSphere Settings 
   vcenter_server         = var.vsphere_server  
   insecure_connection    = true
@@ -63,7 +63,7 @@ source "vsphere-iso" "default" {
 }
 
 build {
-  sources = ["source.vsphere-iso.default"]
+  sources = ["source.vsphere-iso.ubuntu2404-base"]
 
   provisioner "shell" {
     execute_command = "echo '${var.vm_ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"  # Ensures sudo access during provisioning

@@ -1,4 +1,4 @@
-source "vsphere-iso" "default" {
+source "vsphere-iso" "rocky94-base" {
   # vSphere Settings
   vcenter_server        = var.vsphere_server
   insecure_connection   = true
@@ -42,7 +42,8 @@ source "vsphere-iso" "default" {
   RAM_reserve_all       = false
   video_ram             = var.vm_video_ram
   disk_controller_type  = var.vm_disk_controller_type
-  reattach_cdroms = 1
+  #reattach_cdroms = 1
+  
   # Storage definition
   storage {
     disk_size             = var.vm_disk_size
@@ -61,11 +62,11 @@ source "vsphere-iso" "default" {
 }
 
 build {
-  sources = ["source.vsphere-iso.default"]
+  sources = ["source.vsphere-iso.rocky94-base"]
 
   # Provisioning Script
   provisioner "shell" {
-    script       = "./scripts/post-install.sh"
+    script       = "./scripts/rocky94-base-post-install.sh"
     pause_before = "30s"
     timeout      = "5m"
   }
