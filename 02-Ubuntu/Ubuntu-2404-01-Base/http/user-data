@@ -30,7 +30,7 @@ autoinstall:
           dhcp4: true
 
   identity:
-    hostname: ubuntu2404
+    hostname: ubuntu2404-base
     username: vmuser
     password: "$6$SHN1LPbhyvazlDg4$Tpeui2Vi9bWrsYw8rrkVT9uuZ8wAUtnE5HgmyiDGi.l1W73QbHpagOzbpLkWdihTU2B4TN5gSSePKKqCY4phS1" # mkpasswd -m sha-512 Admin123
     #username: ubuntu
@@ -55,6 +55,7 @@ autoinstall:
         - root:Admin123
 
   late-commands:
+    # Allow root SSH
     - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
     - sed -i '$a\PermitRootLogin yes' /target/etc/ssh/sshd_config
     # Grant passwordless sudo to the user for admin tasks

@@ -48,13 +48,13 @@ variable "vm_portgroup_name" {
 
 variable "vm_ssh_password" {
   type      = string
-  default   = "Admin123"
+  default   = ""
   sensitive = true
 }
 
 variable "vm_ssh_username" {
   type      = string
-  default   = "root"
+  default   = ""
   sensitive = true
 }
 

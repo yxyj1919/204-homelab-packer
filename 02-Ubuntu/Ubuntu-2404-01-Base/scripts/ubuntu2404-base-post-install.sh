@@ -16,16 +16,13 @@ wget -O /etc/apt/sources.list https://repo.changw.xyz/ubuntu-2404-local.list
 echo "######################################"
 echo "Update Packages."
 echo "######################################"
-
-apt update -y
+apt update 
 apt upgrade -y
 
 ### Create a cleanup script. ###
 echo "######################################"
 echo "Create a cleanup script."
 echo "######################################"
-
-echo "> Creating cleanup script ..."
 sudo cat << EOF > /tmp/cleanup.sh
 #!/bin/bash
 # 1. Cleans all audit logs.
@@ -78,6 +75,7 @@ history -cw
 echo > ~/.bash_history
 rm -fr /root/.bash_history
 
+<<COMMENT
 # 9. Cloud Init Nuclear Option
 echo "> 9. Cloud Init Nuclear Option"
 rm -rf /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
@@ -85,6 +83,7 @@ rm -rf /etc/cloud/cloud.cfg.d/99-installer.cfg
 echo "disable_vmware_customization: false" >> /etc/cloud/cloud.cfg
 echo "# to update this file, run dpkg-reconfigure cloud-init
 datasource_list: [ VMware, OVF, None ]" > /etc/cloud/cloud.cfg.d/90_dpkg.cfg
+COMMENT
 
 # 10. Set boot options to not override what we are sending in cloud-init
 echo "> 10. Modifying grub"
@@ -97,35 +96,15 @@ EOF
 echo "######################################"
 echo "Change script permissions for execution."
 echo "######################################"
-
-echo '> Changeing script permissions for execution ...'
 sudo chmod +x /tmp/cleanup.sh
-
 
 ### Executes the cleauup script. ### 
 echo "######################################"
 echo "Executes the cleauup script."
 echo "######################################"
-
-echo '> Executing the cleanup script ...'
 sudo /tmp/cleanup.sh
 
-### All done. ### 
-echo '> Done.'  
-
-<<COMMENT
-### Install docker. ###
-apt update -y
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-apt update -y
-apt-cache policy docker-ce
-apt install docker-ce -y
-groupadd docker
-usermod -aG docker vmuser
-mkdir ~/testfolder
-COMMENT
-
+### Configure SSH ###
 echo "######################################"
 echo "Configure SSH"
 echo "######################################"
@@ -133,7 +112,18 @@ sudo ssh-keygen -A
 sudo systemctl enable ssh 
 sudo systemctl start ssh 
 
-echo '> Packer Template Build -- Complete'
+<<COMMENT
+echo "######################################"
+echo "Modify Cloud-init for VMware KB#311873"
+echo "######################################"
+#sed -i 's/^disable_vmware_customization/#disable_vmware_customization/g' /etc/cloud/cloud.cfg
+sed -i '/^disable_vmware_customization/s/^/#/'  /etc/cloud/cloud.cfg
+tee /etc/cloud/cloud.cfg.d/80_disable_network.cfg > /dev/null << EOF
+network:
+  config: disabled
+EOF
+COMMENT
+
 echo "######################################"
 echo "Ubuntu2404-Base-Post-Install -- Complete"
 echo "######################################"

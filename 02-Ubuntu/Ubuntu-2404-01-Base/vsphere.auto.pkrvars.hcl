@@ -22,5 +22,5 @@ vm_iso_file           = "ubuntu-24.04-live-server-amd64.iso"
 vm_iso_folder         = "ISO-Packer"
 vm_ssh_username       = "root"
 vm_ssh_password       = "Admin123"
-shell_scripts = ["./scripts/ubuntu2404-base-post-install.sh"]
+shell_scripts         = ["./scripts/ubuntu2404-base-post-install.sh"]
 

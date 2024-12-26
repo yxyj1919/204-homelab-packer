@@ -16,9 +16,8 @@ if [[ -z "$latest_template" ]]; then
 fi
 
 echo "#################################################"
-echo "Using template: $latest_template"
+echo "Template: $latest_template"
 echo "#################################################"
-
 # 运行 Packer
 #export PACKER_LOG=1
 #packer build -var "vm_template_name=$latest_template" -force .

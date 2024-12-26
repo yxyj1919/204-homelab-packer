@@ -68,7 +68,7 @@ build {
   # Provisioning Script
   /*
   provisioner "shell" {
-    execute_command = "echo '${var.vm_ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"  # Ensures sudo access during provisioning
+    execute_command  = "echo '${var.vm_ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"  # Ensures sudo access during provisioning
     environment_vars = [
       "BUILD_USERNAME=${var.vm_ssh_username}",
     ]
@@ -77,9 +77,10 @@ build {
   }
   */
   provisioner "shell" {
-    script       = "./scripts/ubuntu2404-base-post-install.sh"
-    pause_before = "30s"
-    timeout      = "5m"
+    #script        = "./scripts/ubuntu2404-base-post-install.sh"
+    scripts       = var.shell_scripts
+    pause_before  = "30s"
+    timeout       = "5m"
   }
 
 }

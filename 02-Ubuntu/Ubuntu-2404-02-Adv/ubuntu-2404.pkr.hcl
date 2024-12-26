@@ -22,31 +22,28 @@ content_library_destination {
   datastore            = var.vsphere_datastore
   network              = var.vm_portgroup_name
   linked_clone         = false
-/*
+
   customize {
     linux_options {
-      host_name           = "custom-ubuntu2404"
+      host_name           = "ubuntu2404-adv"
       domain              = "local"
     }
-
     network_interface {
-      ipv4_address        = "192.168.100.50"
-      ipv4_netmask        = "24"  
+      ipv4_address        = ""
     }
-    ipv4_gateway        = "192.168.100.1"
-    dns_server_list      = ["192.168.100.1"]
   }
-*/
-  #ssh_username         = "vmuser"
-  ssh_username         = "root"
-  ssh_password         = "Admin123"
+
+  #ssh_username         = "Admin123"
+  ssh_username         = var.vm_ssh_username
+  ssh_password         = var.vm_ssh_password
 }
 
 build {
   sources = ["source.vsphere-clone.ubuntu2404-adv"]
 
   provisioner "file" {
-    source      = "./scripts/ubuntu2404-adv-post-install.sh"  # Path to your local script
+    #source      = "./scripts/ubuntu2404-adv-post-install.sh"  # Path to your local script
+    sources      =  var.shell_scripts
     destination = "/tmp/post-install.sh"     # Location on the VM
   }
 
@@ -66,7 +63,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "wget -O /tmp/cleanup.sh https://repo.changw.xyz/ubuntu2404-cleanup.sh",
+      "wget -O /tmp/cleanup.sh https://repo.changw.xyz/ubuntu-2404-cleanup.sh",
       "chmod +x /tmp/cleanup.sh",  # Make the script executable
       "/tmp/cleanup.sh"            # Execute the script
     ]
