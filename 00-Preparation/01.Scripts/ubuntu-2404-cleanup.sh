@@ -51,7 +51,7 @@ rm -fr /root/.bash_history
 
 <<COMMENT
 # 9. Cloud Init Nuclear Option
-echo `> 9. Cloud Init Nuclear Option`
+echo '> 9. Cloud Init Nuclear Option'
 rm -rf /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
 rm -rf /etc/cloud/cloud.cfg.d/99-installer.cfg
 echo "disable_vmware_customization: false" >> /etc/cloud/cloud.cfg
@@ -60,6 +60,6 @@ datasource_list: [ VMware, OVF, None ]" > /etc/cloud/cloud.cfg.d/90_dpkg.cfg
 COMMENT 
 
 # 10. Set boot options to not override what we are sending in cloud-init
-echo `> 10. modifying grub`
+echo '> 10. modifying grub'
 sed -i -e "s/GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"/GRUB_CMDLINE_LINUX_DEFAULT=\"\"/" /etc/default/grub
 update-grub
