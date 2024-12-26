@@ -4,42 +4,11 @@ variable "shell_scripts" {
   default     = []
 }
 
-variable "vm_cpu_num" {
-  type    = string
-  default = "2"
-}
-
-variable "vm_disk_controller_type" {
-  type        = list(string)
-  description = "The virtual disk controller types in sequence. (e.g. 'pvscsi')"
-  default     = ["pvscsi"]
-}
-
-variable "vm_disk_size" {
-  type    = string
-  default = "40960"
-}
-
 variable "vm_folder" {
   type    = string
   default = ""
 }
 
-variable "vm_iso_file" {
-  type    = string
-  default = ""
-}
-
-variable "vm_iso_folder" {
-  type        = string
-  description = "The path on the source vSphere datastore for ISO images."
-  default     = ""
-}
-
-variable "vm_mem_size" {
-  type    = string
-  default = "4096"
-}
 
 variable "vm_portgroup_name" {
   type    = string
@@ -63,19 +32,11 @@ variable "vm_template_name" {
   default = ""
 }
 
-variable "vm_version" {
-  type    = string
-  default = "21"
-}
 
-variable "vm_video_ram" {
-  type    = string
-  default = "16384"
-}
 
-variable "vm_vnic" {
+variable "vm_new_template_name" {
   type    = string
-  default = "vmxnet3"
+  default = ""
 }
 
 variable "vsphere_cluster" {
@@ -104,6 +65,11 @@ variable "vsphere_server" {
 }
 
 variable "vsphere_user" {
+  type    = string
+  default = ""
+}
+
+variable "vsphere_content_library" {
   type    = string
   default = ""
 }

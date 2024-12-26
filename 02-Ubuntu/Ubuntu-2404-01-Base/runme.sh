@@ -19,5 +19,6 @@ echo "###################################"
 echo "Making the template" 
 echo "###################################"
 vm_name=$(govc find /Datacenter/vm/98-TEMPLATE  -type m -name 'TEMPLATE-PACKER-Ubuntu2404-01-BASE*' | sort | tail -n 1)
+echo "Find the VM: "$vm_name
 govc device.remove -vm $vm_name cdrom-3001
 govc vm.markastemplate $vm_name

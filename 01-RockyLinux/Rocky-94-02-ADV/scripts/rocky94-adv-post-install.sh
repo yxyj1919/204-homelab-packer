@@ -48,8 +48,9 @@ dnf install gparted -y
 #nmcli connection modify ens192 ipv4.method auto ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv6.method auto
 #nmcli connection up ens192
 
-echo '> Packer Template Build -- Complete'
 echo "######################################"
 echo "Rocky9-ADV-Post-Install -- Complete"
 echo "######################################"
+echo '> Packer Template Build -- Complete'
+
 

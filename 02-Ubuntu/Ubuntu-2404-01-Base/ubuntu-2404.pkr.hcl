@@ -1,14 +1,14 @@
 source "vsphere-iso" "ubuntu2404-base" {
   # vSphere Settings 
   vcenter_server         = var.vsphere_server  
-  insecure_connection    = true
+  insecure_connection   = true
   username               = var.vsphere_user
   password               = var.vsphere_password
   datacenter             = var.vsphere_datacenter
   cluster                = var.vsphere_cluster 
   datastore              = var.vsphere_datastore
   folder                 = var.vm_folder
-  convert_to_template    = true
+  #convert_to_template    = true
   vm_name                = "${var.vm_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"  # Unique VM name with timestamp
   iso_paths              = ["[${var.vsphere_datastore}]/${var.vm_iso_folder}/${var.vm_iso_file}"]
 
@@ -52,8 +52,8 @@ source "vsphere-iso" "ubuntu2404-base" {
   }
 
   # SSH Configuration
-  ssh_username            = "vmuser"  
-  ssh_password            = "Admin123"  
+  ssh_username            = var.vm_ssh_username
+  ssh_password            = var.vm_ssh_password
   ssh_handshake_attempts  = 100
   #ssh_port               = 22
   #ssh_timeout            = "20m"  # 20 minutes is fine for waiting for SSH; adjust if needed
@@ -64,7 +64,9 @@ source "vsphere-iso" "ubuntu2404-base" {
 
 build {
   sources = ["source.vsphere-iso.ubuntu2404-base"]
-
+ 
+  # Provisioning Script
+  /*
   provisioner "shell" {
     execute_command = "echo '${var.vm_ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"  # Ensures sudo access during provisioning
     environment_vars = [
@@ -73,4 +75,11 @@ build {
     scripts = var.shell_scripts  # Ensure your shell scripts are specified correctly
     expect_disconnect = true  # Allows the VM to shut down after provisioning if needed
   }
+  */
+  provisioner "shell" {
+    script       = "./scripts/ubuntu2404-base-post-install.sh"
+    pause_before = "30s"
+    timeout      = "5m"
+  }
+
 }

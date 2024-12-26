@@ -1,76 +1,83 @@
-source "vsphere-iso" "ubuntu2404-base" {
+source "vsphere-clone" "ubuntu2404-adv" {
   # vSphere Settings 
-  vcenter_server         = var.vsphere_server  
-  insecure_connection    = true
-  username               = var.vsphere_user
-  password               = var.vsphere_password
-  datacenter             = var.vsphere_datacenter
-  cluster                = var.vsphere_cluster 
-  datastore              = var.vsphere_datastore
-  folder                 = var.vm_folder
-  convert_to_template    = true
-  vm_name                = "${var.vm_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"  # Unique VM name with timestamp
-  iso_paths              = ["[${var.vsphere_datastore}]/${var.vm_iso_folder}/${var.vm_iso_file}"]
+  vcenter_server       = var.vsphere_server
+  username             = var.vsphere_user
+  password             = var.vsphere_password
+  insecure_connection  = true
 
-  # Boot commands for Ubuntu24.04 installation
-  boot_command           = [
-    "c<wait>",                                # Wait for the system to be ready before sending commands
-    "linux /casper/vmlinuz --- autoinstall",  # Ensure the autoinstall option is passed for automated Ubuntu installation
-    "<enter><wait>",                          # Wait for the kernel to load
-    "initrd /casper/initrd",                  # Load the initrd
-    "<enter><wait>",                          # Wait again for the initrd to load
-    "boot",                                   # Boot the VM
-    "<enter>"
-  ] 
-  boot_wait              = "3s"               # A bit more time to wait before sending commands, you can increase this if needed
+content_library_destination {
+    destroy = "false"
+    library = var.vsphere_content_library
+    name    = "${var.vm_new_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
+    ovf     = "true"
+}
+  convert_to_template = "false"
 
-  # CD files for cloud-init (make sure these files exist and are correctly configured)
-  cd_files = [
-    "./http/meta-data",
-    "./http/user-data"
-  ]
-  cd_label = "cidata"
+  template             = var.vm_template_name
+  datacenter           = var.vsphere_datacenter
+  cluster              = var.vsphere_cluster
 
-  # Virtual machine configuration
-  guest_os_type         = "ubuntu64Guest"
-  vm_version            = var.vm_version
-  CPUs                  = var.vm_cpu_num
-  RAM                   = var.vm_mem_size
-  video_ram             = var.vm_video_ram
-  disk_controller_type  = var.vm_disk_controller_type
+  vm_name              = "${var.vm_new_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
+  folder               = var.vm_folder
+  datastore            = var.vsphere_datastore
+  network              = var.vm_portgroup_name
+  linked_clone         = false
+/*
+  customize {
+    linux_options {
+      host_name           = "custom-ubuntu2404"
+      domain              = "local"
+    }
 
-  # Storage settings
-  storage {
-    disk_size             = var.vm_disk_size
-    disk_thin_provisioned = true  # Thin provisioning saves space but may impact performance depending on workload
+    network_interface {
+      ipv4_address        = "192.168.100.50"
+      ipv4_netmask        = "24"  
+    }
+    ipv4_gateway        = "192.168.100.1"
+    dns_server_list      = ["192.168.100.1"]
   }
-
-  # Network adapter configuration
-  network_adapters {
-    network               = var.vm_portgroup_name
-    network_card          = "vmxnet3"  # vmxnet3 is optimal for performance on vSphere
-  }
-
-  # SSH Configuration
-  ssh_username            = "vmuser"  
-  ssh_password            = "Admin123"  
-  ssh_handshake_attempts  = 100
-  #ssh_port               = 22
-  #ssh_timeout            = "20m"  # 20 minutes is fine for waiting for SSH; adjust if needed
-
-  #shutdown_command        = "sudo shutdown -P now"
-
+*/
+  #ssh_username         = "vmuser"
+  ssh_username         = "root"
+  ssh_password         = "Admin123"
 }
 
 build {
-  sources = ["source.vsphere-iso.ubuntu2404-base"]
+  sources = ["source.vsphere-clone.ubuntu2404-adv"]
+
+  provisioner "file" {
+    source      = "./scripts/ubuntu2404-adv-post-install.sh"  # Path to your local script
+    destination = "/tmp/post-install.sh"     # Location on the VM
+  }
 
   provisioner "shell" {
-    execute_command = "echo '${var.vm_ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"  # Ensures sudo access during provisioning
-    environment_vars = [
-      "BUILD_USERNAME=${var.vm_ssh_username}",
+    inline = [
+      "chmod +x /tmp/post-install.sh",    # Make the script executable
+      "/tmp/post-install.sh"              # Run the script
     ]
-    scripts = var.shell_scripts  # Ensure your shell scripts are specified correctly
-    expect_disconnect = true  # Allows the VM to shut down after provisioning if needed
+  }
+
+  provisioner "shell" {
+    inline = [
+      "while ! ping -c 1 192.168.100.1; do sleep 5; done",
+      "echo Network is ready."
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      "wget -O /tmp/cleanup.sh https://repo.changw.xyz/ubuntu2404-cleanup.sh",
+      "chmod +x /tmp/cleanup.sh",  # Make the script executable
+      "/tmp/cleanup.sh"            # Execute the script
+    ]
+  }
+
+  post-processor "vsphere-template" {
+    folder             = var.vm_folder
+    host               = var.vsphere_server
+    username           = var.vsphere_user
+    password           = var.vsphere_password
+    insecure           = true
+    name               = "${var.vm_new_template_name}-${formatdate("YYYY-MM-DD", timestamp())}"
   }
 }

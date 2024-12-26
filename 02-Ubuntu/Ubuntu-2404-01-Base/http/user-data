@@ -7,7 +7,7 @@ autoinstall:
   early-commands:
     # Workaround to stop SSH for Packer as it thinks the SSH connection timed out
     - sudo systemctl stop ssh
-
+  
   locale: en_US
   keyboard:
     layout: us
@@ -16,7 +16,7 @@ autoinstall:
     # List of essential packages for the VM
     - open-vm-tools
     - openssh-server
-    - cloud-init
+    #- cloud-init
     - net-tools
     - vim
     # Add other packages as needed (e.g., net-tools, curl, etc.)
@@ -48,8 +48,15 @@ autoinstall:
 
   user-data:
     disable_root: false  # Ensure root is enabled if needed for recovery
+    timezone: "Asia/Shanghai"
+    chpasswd:
+      expire: false
+      list:
+        - root:Admin123
 
   late-commands:
+    - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
+    - sed -i '$a\PermitRootLogin yes' /target/etc/ssh/sshd_config
     # Grant passwordless sudo to the user for admin tasks
     - echo 'vmuser ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/vmuser
     - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/vmuser

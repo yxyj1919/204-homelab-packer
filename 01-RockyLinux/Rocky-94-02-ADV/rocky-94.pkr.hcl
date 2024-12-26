@@ -24,7 +24,7 @@ content_library_destination {
 
   customize {
     linux_options {
-      host_name           = "custom-rocky9"
+      host_name           = "custom-rocky94"
       domain              = "local"
     }
 
