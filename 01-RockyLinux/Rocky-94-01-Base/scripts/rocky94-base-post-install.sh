@@ -20,8 +20,6 @@ dnf install epel-release -y
 # wget -O /etc/yum.repos.d/docker-local.repo  https://repo.changw.xyz/docker-local.repo
 yum makecache
 
-
-
 # Update Packages. #
 echo "######################################"
 echo "Update Packages."
@@ -88,6 +86,7 @@ unset HISTFILE
 history -cw
 echo > ~/.bash_history
 rm -fr /root/.bash_history
+
 <<COMMENT
 # 9. Cloud Init Nuclear Option
 echo '> 9. Cloud Init Nuclear Option'
@@ -97,6 +96,7 @@ echo "disable_vmware_customization: false" >> /etc/cloud/cloud.cfg
 echo "# to update this file, run dpkg-reconfigure cloud-init
 datasource_list: [ VMware, OVF, None ]" > /etc/cloud/cloud.cfg.d/90_dpkg.cfg
 COMMENT
+
 # 10. Set boot options to not override what we are sending in cloud-init.
 echo '> 10. Modifying grub ...'
 sed -i -e "s/GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"/GRUB_CMDLINE_LINUX_DEFAULT=\"\"/" /etc/default/grub
@@ -124,22 +124,6 @@ sudo /tmp/cleanup.sh
 
 ### All done. ### 
 echo '> Done.'  
-
-<<COMMENT
-# Install docker. #
-echo "######################################"
-echo "Install Docker"
-echo "######################################"
-dnf update -y
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-apt update -y
-apt-cache policy docker-ce
-apt install docker-ce -y
-groupadd docker
-usermod -aG docker vmuser
-mkdir ~/testfolder
-COMMENT
 
 #nmcli connection modify ens192 ipv4.method auto ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv6.method auto
 #nmcli connection up ens192

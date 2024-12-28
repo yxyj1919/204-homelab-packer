@@ -24,17 +24,12 @@ content_library_destination {
 
   customize {
     linux_options {
-      host_name           = "custom-rocky94"
+      host_name           = "rocky94-adv"
       domain              = "local"
     }
 
-    network_interface {
-      ipv4_address        = "192.168.100.50"
-      ipv4_netmask        = "24"
-      
+    network_interface {      
     }
-    ipv4_gateway        = "192.168.100.1"
-    dns_server_list      = ["192.168.100.1"]
   }
 
   #ssh_username         = "vmuser"
